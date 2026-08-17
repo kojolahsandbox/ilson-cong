@@ -43,10 +43,25 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        // NasDem colors inspiration
-                        'nasdem-blue': '#1E3A8A', // Deep blue
-                        'nasdem-yellow': '#FBBF24', // Yellow/Gold
+                        'nasdem-blue': '#1E3A8A', 
+                        'nasdem-yellow': '#FBBF24',
                         'dark-gray': '#1F2937',
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
                     }
                 }
             }
@@ -54,15 +69,60 @@
     </script>
     
     <style>
-        /* Custom styles that are better handled outside standard utility classes */
+        /* Custom styles */
         .glass-nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
+        
         .hero-pattern {
             background-color: #1E3A8A;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232a4fac' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Nav Link Hover Animation */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #1E3A8A;
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* --- Scroll Reveal Animations --- */
+        .reveal-up, .reveal-left, .reveal-right, .reveal-zoom {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+            will-change: transform, opacity;
+        }
+        .reveal-up { transform: translateY(50px); }
+        .reveal-left { transform: translateX(-50px); }
+        .reveal-right { transform: translateX(50px); }
+        .reveal-zoom { transform: scale(0.8); }
+
+        /* Animation Delays */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+
+        /* Active Class toggled by JS */
+        .reveal-active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(0) scale(1);
         }
     </style>
 </head>
@@ -73,8 +133,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex-shrink-0 flex items-center gap-3">
-                    <!-- Placeholder Logo NasDem / Garuda -->
-                    <img src="https://placehold.co/40x40/1E3A8A/FFFFFF?text=ILC" alt="Logo" class="h-10 w-10 rounded-full shadow-md">
+                    <img src="https://placehold.co/40x40/1E3A8A/FFFFFF?text=ILC" alt="Logo" class="h-10 w-10 rounded-full shadow-md hover:scale-110 transition-transform duration-300">
                     <div>
                         <h1 class="text-xl font-bold text-nasdem-blue leading-tight">H. Ilson Cong</h1>
                         <p class="text-xs text-gray-500 font-semibold tracking-wider">DPRD PROV. SUMBAR</p>
@@ -83,17 +142,17 @@
                 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#beranda" class="text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Beranda</a>
-                    <a href="#profil" class="text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Profil</a>
-                    <a href="#kegiatan" class="text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Kegiatan & Agenda</a>
-                    <a href="#galeri" class="text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Galeri</a>
-                    <a href="#laporan" class="text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Laporan</a>
-                    <a href="#kontak" class="bg-nasdem-yellow text-nasdem-blue px-5 py-2 rounded-full font-bold hover:bg-yellow-400 transition-colors shadow-md">Kontak</a>
+                    <a href="#beranda" class="nav-link text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Beranda</a>
+                    <a href="#profil" class="nav-link text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Profil</a>
+                    <a href="#kegiatan" class="nav-link text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Kegiatan & Agenda</a>
+                    <a href="#galeri" class="nav-link text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Galeri</a>
+                    <a href="#laporan" class="nav-link text-gray-700 hover:text-nasdem-blue font-medium transition-colors">Laporan</a>
+                    <a href="#kontak" class="bg-nasdem-yellow text-nasdem-blue px-6 py-2 rounded-full font-bold hover:bg-yellow-400 hover:shadow-lg transition-all transform hover:-translate-y-1">Kontak</a>
                 </div>
 
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-nasdem-blue hover:text-nasdem-yellow focus:outline-none p-2">
+                    <button id="mobile-menu-btn" class="text-nasdem-blue hover:text-nasdem-yellow focus:outline-none p-2 transition-colors">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
@@ -101,61 +160,64 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg origin-top transition-all duration-300">
             <div class="px-4 pt-2 pb-6 space-y-2">
-                <a href="#beranda" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-gray-50">Beranda</a>
-                <a href="#profil" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-gray-50">Profil</a>
-                <a href="#kegiatan" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-gray-50">Kegiatan & Agenda</a>
-                <a href="#galeri" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-gray-50">Galeri</a>
-                <a href="#laporan" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-gray-50">Laporan</a>
-                <a href="#kontak" class="block px-3 py-3 rounded-md text-base font-bold text-nasdem-blue bg-nasdem-yellow text-center mt-4">Hubungi Saya</a>
+                <a href="#beranda" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-blue-50 transition-colors">Beranda</a>
+                <a href="#profil" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-blue-50 transition-colors">Profil</a>
+                <a href="#kegiatan" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-blue-50 transition-colors">Kegiatan & Agenda</a>
+                <a href="#galeri" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-blue-50 transition-colors">Galeri</a>
+                <a href="#laporan" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-nasdem-blue hover:bg-blue-50 transition-colors">Laporan</a>
+                <a href="#kontak" class="block px-3 py-3 rounded-md text-base font-bold text-nasdem-blue bg-nasdem-yellow text-center mt-4 active:scale-95 transition-transform">Hubungi Saya</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="beranda" class="pt-28 pb-20 lg:pt-40 lg:pb-28 hero-pattern text-white relative overflow-hidden">
-        <!-- Decorative blob -->
-        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-nasdem-yellow opacity-20 blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-white opacity-10 blur-3xl"></div>
+        <!-- Animated Decorative blobs -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-nasdem-yellow opacity-20 blur-3xl animate-blob"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-blue-300 opacity-20 blur-3xl animate-blob animation-delay-2000"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col-reverse lg:flex-row items-center gap-12">
+                
                 <!-- Text Content -->
-                <div class="w-full lg:w-3/5 text-center lg:text-left">
-                    <div class="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-semibold tracking-wide mb-6">
+                <div class="w-full lg:w-3/5 text-center lg:text-left reveal-left">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-semibold tracking-wide mb-6 shadow-inner">
                         Dapil Payakumbuh & Lima Puluh Kota
                     </div>
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
                         Bersama Membangun <br/>
-                        <span class="text-nasdem-yellow">Sumatera Barat</span> Lebih Baik
+                        <span class="text-nasdem-yellow inline-block animate-pulse">Sumatera Barat</span> Lebih Baik
                     </h1>
                     <p class="text-lg text-blue-100 mb-8 max-w-2xl mx-auto lg:mx-0">
                         Website resmi Dr(C) H. Ilson Cong, SE, MM, Dt. Mongguang. Wadah informasi, kegiatan, dan sarana menampung aspirasi masyarakat untuk kemajuan daerah.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <a href="#profil" class="bg-nasdem-yellow text-nasdem-blue px-8 py-3.5 rounded-full font-bold text-lg hover:bg-yellow-400 hover:shadow-lg transition-all transform hover:-translate-y-1">
+                        <a href="#profil" class="bg-nasdem-yellow text-nasdem-blue px-8 py-3.5 rounded-full font-bold text-lg hover:bg-yellow-400 hover:shadow-lg transition-all transform hover:-translate-y-1 hover:scale-105">
                             Kenali Lebih Dekat
                         </a>
-                        <a href="#kontak" class="bg-transparent border-2 border-white text-white px-8 py-3.5 rounded-full font-bold text-lg hover:bg-white hover:text-nasdem-blue transition-all">
+                        <a href="#kontak" class="bg-transparent border-2 border-white text-white px-8 py-3.5 rounded-full font-bold text-lg hover:bg-white hover:text-nasdem-blue transition-all transform hover:-translate-y-1">
                             Sampaikan Aspirasi
                         </a>
                     </div>
                 </div>
                 
                 <!-- Hero Image -->
-                <div class="w-full sm:w-2/3 lg:w-2/5 flex justify-center relative">
-                    <!-- Outer ring -->
-                    <div class="absolute inset-0 bg-nasdem-yellow rounded-full transform rotate-3 scale-105 opacity-20"></div>
-                    <!-- Assuming you will replace this placeholder with the actual photo from the CV -->
-                    <img src="foto-resmi.png" alt="Dr(C) H. Ilson Cong" class="rounded-3xl shadow-2xl z-10 relative object-cover border-4 border-white/20 h-[500px] w-full max-w-md">
+                <div class="w-full sm:w-2/3 lg:w-2/5 flex justify-center relative reveal-right delay-200">
+                    <!-- Outer ring pulsing -->
+                    <div class="absolute inset-0 bg-nasdem-yellow rounded-full transform rotate-3 scale-105 opacity-20 animate-pulse"></div>
                     
-                    <!-- Floating badge -->
-                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl z-20 border border-gray-100 flex items-center gap-3 hidden sm:flex">
-                        <img src="https://placehold.co/40x40/1E3A8A/FFFFFF?text=N" alt="Partai NasDem" class="h-10 w-10 rounded-full">
-                        <div>
-                            <p class="text-xs text-gray-500 font-medium">Fraksi Partai</p>
-                            <p class="text-sm font-bold text-nasdem-blue">NasDem</p>
+                    <div class="relative animate-float">
+                        <img src="foto-resmi.png" alt="Dr(C) H. Ilson Cong" class="rounded-3xl shadow-2xl z-10 relative object-cover border-4 border-white/20 h-[500px] w-full max-w-md bg-nasdem-blue">
+                        
+                        <!-- Floating badge -->
+                        <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl z-20 border border-gray-100 hidden sm:flex items-center gap-3 transform hover:scale-110 transition-transform">
+                            <img src="https://placehold.co/40x40/1E3A8A/FFFFFF?text=N" alt="Partai NasDem" class="h-10 w-10 rounded-full">
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Fraksi Partai</p>
+                                <p class="text-sm font-bold text-nasdem-blue">NasDem</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,7 +228,7 @@
     <!-- Profile & CV Section -->
     <section id="profil" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal-up">
                 <h2 class="text-3xl md:text-4xl font-bold text-nasdem-blue mb-4">Profil Singkat</h2>
                 <div class="w-24 h-1.5 bg-nasdem-yellow mx-auto rounded-full"></div>
             </div>
@@ -174,43 +236,43 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 <!-- Biodata Col -->
                 <div class="lg:col-span-4 space-y-8">
-                    <div class="bg-gray-50 rounded-2xl p-8 shadow-sm border border-gray-100">
+                    <div class="bg-gray-50 rounded-2xl p-8 shadow-sm border border-gray-100 reveal-left hover:shadow-md transition-shadow">
                         <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                            <i class="fas fa-user-circle text-nasdem-blue"></i> Data Pribadi
+                            <i class="fas fa-user-circle text-nasdem-blue text-2xl"></i> Data Pribadi
                         </h3>
                         <ul class="space-y-4">
-                            <li class="flex flex-col">
-                                <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Nama Lengkap</span>
+                            <li class="flex flex-col group">
+                                <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider group-hover:text-nasdem-blue transition-colors">Nama Lengkap</span>
                                 <span class="font-medium text-gray-800">Dr(C) H. Ilson Cong, SE, MM, Dt. Mongguang</span>
                             </li>
-                            <li class="flex flex-col">
-                                <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">TTL</span>
+                            <li class="flex flex-col group">
+                                <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider group-hover:text-nasdem-blue transition-colors">TTL</span>
                                 <span class="font-medium text-gray-800">Taeh, 15 Maret 1964</span>
                             </li>
-                            <li class="flex flex-col">
-                                <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Agama</span>
+                            <li class="flex flex-col group">
+                                <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider group-hover:text-nasdem-blue transition-colors">Agama</span>
                                 <span class="font-medium text-gray-800">Islam</span>
                             </li>
-                            <li class="flex flex-col">
-                                <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Domisili</span>
+                            <li class="flex flex-col group">
+                                <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider group-hover:text-nasdem-blue transition-colors">Domisili</span>
                                 <span class="font-medium text-gray-800">Kubu Gadang, Taeh Baruah, Kec. Payakumbuh, Kab. Lima Puluh Kota</span>
                             </li>
                         </ul>
                     </div>
 
-                    <div class="bg-nasdem-blue text-white rounded-2xl p-8 shadow-lg">
+                    <div class="bg-nasdem-blue text-white rounded-2xl p-8 shadow-lg reveal-left delay-100 transform hover:-translate-y-2 transition-transform duration-300">
                         <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
-                            <i class="fas fa-graduation-cap text-nasdem-yellow"></i> Pendidikan
+                            <i class="fas fa-graduation-cap text-nasdem-yellow text-2xl"></i> Pendidikan
                         </h3>
                         <div class="space-y-6">
-                            <div class="relative pl-6 border-l-2 border-white/30">
-                                <div class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-nasdem-yellow border-4 border-nasdem-blue"></div>
-                                <h4 class="font-bold text-lg">S3 (Kandidat Doktor)</h4>
+                            <div class="relative pl-6 border-l-2 border-white/30 group">
+                                <div class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-nasdem-yellow border-4 border-nasdem-blue group-hover:scale-125 transition-transform"></div>
+                                <h4 class="font-bold text-lg group-hover:text-nasdem-yellow transition-colors">S3 (Kandidat Doktor)</h4>
                                 <p class="text-sm text-blue-200 mt-1">Ilmu Hukum Islam</p>
                                 <p class="text-sm font-medium mt-1">UIN Imam Bonjol Padang (2024 - Sekarang)</p>
                             </div>
-                            <div class="relative pl-6 border-l-2 border-white/30">
-                                <div class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-gray-400 border-4 border-nasdem-blue"></div>
+                            <div class="relative pl-6 border-l-2 border-white/30 group">
+                                <div class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-gray-400 border-4 border-nasdem-blue group-hover:bg-white transition-colors"></div>
                                 <h4 class="font-bold text-lg">S2 Magister Manajemen</h4>
                                 <p class="text-sm text-blue-200 mt-1">ITB Haji Agus Salim Bukittinggi (2023)</p>
                             </div>
@@ -222,12 +284,12 @@
                 <div class="lg:col-span-8 space-y-12">
                     <!-- Pengalaman Kerja -->
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-gray-100 pb-2">Pengalaman Kerja di Legislatif</h3>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-gray-100 pb-2 reveal-up">Pengalaman Kerja di Legislatif</h3>
                         <div class="space-y-6">
-                            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 reveal-up delay-100">
                                 <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-3">
                                     <h4 class="text-lg font-bold text-nasdem-blue">Anggota DPRD Prov. Sumatera Barat</h4>
-                                    <span class="inline-block bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold mt-2 sm:mt-0">2024 - 2029 (Aktif)</span>
+                                    <span class="inline-block bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold mt-2 sm:mt-0 shadow-sm">2024 - 2029 (Aktif)</span>
                                 </div>
                                 <p class="text-gray-600 flex items-start gap-2">
                                     <i class="fas fa-check-circle text-nasdem-yellow mt-1"></i> 
@@ -235,7 +297,7 @@
                                 </p>
                             </div>
                             
-                            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 reveal-up delay-200">
                                 <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-3">
                                     <h4 class="text-lg font-bold text-gray-800">Anggota DPRD Prov. Sumatera Barat</h4>
                                     <span class="inline-block bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full font-bold mt-2 sm:mt-0">2009 - 2014</span>
@@ -246,7 +308,7 @@
                                 </p>
                             </div>
 
-                            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 reveal-up delay-300">
                                 <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-3">
                                     <h4 class="text-lg font-bold text-gray-800">Anggota DPRD Kab. Lima Puluh Kota</h4>
                                     <span class="inline-block bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full font-bold mt-2 sm:mt-0">2004 - 2009</span>
@@ -261,11 +323,11 @@
 
                     <!-- Organisasi & Prestasi -->
                     <div class="grid md:grid-cols-2 gap-8">
-                        <div>
+                        <div class="reveal-up delay-100">
                             <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-gray-100 pb-2">Riwayat Organisasi</h3>
                             <ul class="space-y-4">
-                                <li class="flex gap-3">
-                                    <div class="mt-1 bg-blue-100 p-2 rounded-lg text-nasdem-blue">
+                                <li class="flex gap-3 group">
+                                    <div class="mt-1 bg-blue-100 p-2 rounded-lg text-nasdem-blue group-hover:bg-nasdem-blue group-hover:text-white transition-colors duration-300">
                                         <i class="fas fa-users"></i>
                                     </div>
                                     <div>
@@ -273,8 +335,8 @@
                                         <p class="text-sm text-gray-500">Kabupaten Lima Puluh Kota (2016-2025)</p>
                                     </div>
                                 </li>
-                                <li class="flex gap-3">
-                                    <div class="mt-1 bg-gray-100 p-2 rounded-lg text-gray-600">
+                                <li class="flex gap-3 group">
+                                    <div class="mt-1 bg-gray-100 p-2 rounded-lg text-gray-600 group-hover:bg-gray-300 transition-colors duration-300">
                                         <i class="fas fa-users"></i>
                                     </div>
                                     <div>
@@ -282,8 +344,8 @@
                                         <p class="text-sm text-gray-500">Kabupaten Lima Puluh Kota (2004-2009)</p>
                                     </div>
                                 </li>
-                                <li class="flex gap-3">
-                                    <div class="mt-1 bg-gray-100 p-2 rounded-lg text-gray-600">
+                                <li class="flex gap-3 group">
+                                    <div class="mt-1 bg-gray-100 p-2 rounded-lg text-gray-600 group-hover:bg-gray-300 transition-colors duration-300">
                                         <i class="fas fa-file-signature"></i>
                                     </div>
                                     <div>
@@ -293,29 +355,29 @@
                                 </li>
                             </ul>
                         </div>
-                        <div>
+                        <div class="reveal-up delay-200">
                             <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-gray-100 pb-2">Pencapaian & Prestasi</h3>
                             <ul class="space-y-4">
-                                <li class="flex gap-3">
-                                    <div class="mt-1 text-nasdem-yellow">
+                                <li class="flex gap-3 hover:-translate-y-1 transition-transform">
+                                    <div class="mt-1 text-nasdem-yellow text-xl">
                                         <i class="fas fa-trophy"></i>
                                     </div>
                                     <p class="text-gray-700 text-sm">Peningkatan kursi Partai NasDem DPRD Kab. Lima Puluh Kota dari 0 menjadi 5 Kursi serta unsur pimpinan (Wakil Ketua).</p>
                                 </li>
-                                <li class="flex gap-3">
-                                    <div class="mt-1 text-nasdem-yellow">
+                                <li class="flex gap-3 hover:-translate-y-1 transition-transform">
+                                    <div class="mt-1 text-nasdem-yellow text-xl">
                                         <i class="fas fa-award"></i>
                                     </div>
                                     <p class="text-gray-700 text-sm">PDRI AWARD (2010).</p>
                                 </li>
-                                <li class="flex gap-3">
-                                    <div class="mt-1 text-nasdem-yellow">
+                                <li class="flex gap-3 hover:-translate-y-1 transition-transform">
+                                    <div class="mt-1 text-nasdem-yellow text-xl">
                                         <i class="fas fa-globe"></i>
                                     </div>
                                     <p class="text-gray-700 text-sm">Delegasi Peringatan Hari Kopi Sedunia di Italia (2010).</p>
                                 </li>
-                                <li class="flex gap-3">
-                                    <div class="mt-1 text-nasdem-yellow">
+                                <li class="flex gap-3 hover:-translate-y-1 transition-transform">
+                                    <div class="mt-1 text-nasdem-yellow text-xl">
                                         <i class="fas fa-star"></i>
                                     </div>
                                     <p class="text-gray-700 text-sm">Calon Wakil Bupati Kabupaten Lima Puluh Kota 2015-2020.</p>
@@ -328,43 +390,43 @@
         </div>
     </section>
 
-    <!-- Visi Misi (Placeholder Content) -->
+    <!-- Visi Misi -->
     <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-nasdem-blue rounded-3xl overflow-hidden shadow-2xl relative">
+            <div class="bg-nasdem-blue rounded-3xl overflow-hidden shadow-2xl relative reveal-zoom">
                 <!-- Background graphic -->
-                <div class="absolute right-0 top-0 opacity-10">
+                <div class="absolute right-0 top-0 opacity-10 animate-pulse">
                     <svg width="400" height="400" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                         <path fill="#FFFFFF" d="M45.7,-76.1C58.9,-69.3,69,-55.4,77.5,-41.2C85.9,-27.1,92.6,-13.5,91.8,-0.5C91,12.6,82.6,25.1,73.8,36.5C65,47.9,55.8,58.2,43.9,64.3C32,70.5,16,72.4,1.1,70.4C-13.8,68.4,-27.6,62.6,-39.7,55.1C-51.7,47.6,-62.1,38.5,-69.5,27.3C-76.9,16,-81.4,2.5,-79.8,-10.3C-78.1,-23.1,-70.3,-35.1,-60.7,-44.7C-51.1,-54.3,-39.8,-61.4,-27.5,-69.2C-15.1,-77,-2.6,-85.4,10.6,-86.3C23.9,-87.3,32.4,-82.9,45.7,-76.1Z" transform="translate(100 100)" />
                     </svg>
                 </div>
 
                 <div class="p-10 md:p-16 relative z-10 grid md:grid-cols-2 gap-12 items-center">
-                    <div class="text-white">
+                    <div class="text-white reveal-left delay-200">
                         <h2 class="text-3xl md:text-4xl font-bold mb-6">Fokus Perjuangan</h2>
                         <p class="text-blue-100 mb-6 text-lg leading-relaxed">
                             Sebagai wakil rakyat, komitmen utama saya adalah memastikan suara masyarakat Payakumbuh dan Lima Puluh Kota didengar dan diwujudkan dalam kebijakan nyata di tingkat provinsi.
                         </p>
                         <ul class="space-y-4">
-                            <li class="flex items-start gap-3">
+                            <li class="flex items-start gap-3 hover:translate-x-2 transition-transform duration-300">
                                 <i class="fas fa-check-circle text-nasdem-yellow mt-1.5 text-xl"></i>
                                 <span>Peningkatan kualitas infrastruktur jalan dan pertanian.</span>
                             </li>
-                            <li class="flex items-start gap-3">
+                            <li class="flex items-start gap-3 hover:translate-x-2 transition-transform duration-300">
                                 <i class="fas fa-check-circle text-nasdem-yellow mt-1.5 text-xl"></i>
                                 <span>Pemberdayaan ekonomi kerakyatan dan UMKM.</span>
                             </li>
-                            <li class="flex items-start gap-3">
+                            <li class="flex items-start gap-3 hover:translate-x-2 transition-transform duration-300">
                                 <i class="fas fa-check-circle text-nasdem-yellow mt-1.5 text-xl"></i>
                                 <span>Peningkatan akses dan kualitas pendidikan serta kesehatan.</span>
                             </li>
                         </ul>
                     </div>
-                    <div class="relative">
+                    <div class="relative reveal-right delay-200">
                         <!-- Placeholder Video/Image -->
-                        <div class="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden shadow-xl border-4 border-white/20 relative group cursor-pointer">
-                            <img src="https://placehold.co/800x450/1F2937/FFFFFF?text=Video+Profil/Visi+Misi" alt="Video Visi Misi" class="object-cover w-full h-full">
-                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/20 transition-all">
+                        <div class="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden shadow-xl border-4 border-white/20 relative group cursor-pointer hover:shadow-2xl transition-all duration-300">
+                            <img src="https://placehold.co/800x450/1F2937/FFFFFF?text=Video+Profil/Visi+Misi" alt="Video Visi Misi" class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/20 transition-colors duration-500">
                                 <div class="w-16 h-16 bg-nasdem-yellow rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
                                     <i class="fas fa-play text-nasdem-blue text-2xl ml-1"></i>
                                 </div>
@@ -376,88 +438,27 @@
         </div>
     </section>
 
-    <!-- Agenda & Kegiatan Section -->
+    <!-- Agenda & Kegiatan Section (Kosong sementara sesuai source code asli) -->
     <section id="kegiatan" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal-up">
                 <div>
                     <h2 class="text-3xl md:text-4xl font-bold text-nasdem-blue mb-4">Kegiatan & Pengumuman</h2>
                     <div class="w-24 h-1.5 bg-nasdem-yellow rounded-full"></div>
                 </div>
-                <a href="#" class="mt-4 md:mt-0 text-nasdem-blue font-semibold hover:text-nasdem-yellow transition-colors flex items-center gap-2">
-                    Lihat Semua <i class="fas fa-arrow-right"></i>
+                <a href="#" class="mt-4 md:mt-0 text-nasdem-blue font-semibold hover:text-nasdem-yellow transition-colors flex items-center gap-2 group">
+                    Lihat Semua <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
                 </a>
             </div>
 
-            <!-- Grid Kegiatan (Dummy Data) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Card 1 -->
-<!--                 <article class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="https://placehold.co/600x400/e2e8f0/475569?text=Reses+Dapil" alt="Reses" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-4 left-4 bg-nasdem-yellow text-nasdem-blue text-xs font-bold px-3 py-1 rounded-full">
-                            Kegiatan
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="text-sm text-gray-500 mb-2 flex items-center gap-2">
-                            <i class="far fa-calendar-alt"></i> 12 Agustus 2026
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-nasdem-blue transition-colors">Menjemput Aspirasi Masyarakat di Taeh Baruah</h3>
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-                            Pelaksanaan reses masa sidang ke-II untuk mendengarkan langsung keluhan dan harapan masyarakat terkait perbaikan infrastruktur irigasi pertanian...
-                        </p>
-                        <a href="#" class="text-nasdem-blue font-semibold text-sm hover:underline">Baca Selengkapnya</a>
-                    </div>
-                </article> -->
-
-                <!-- Card 2 -->
-<!--                 <article class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="https://placehold.co/600x400/e2e8f0/475569?text=Rapat+Paripurna" alt="Rapat" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-4 left-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                            Agenda Dewan
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="text-sm text-gray-500 mb-2 flex items-center gap-2">
-                            <i class="far fa-calendar-alt"></i> 10 Agustus 2026
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-nasdem-blue transition-colors">Rapat Paripurna DPRD Provinsi Sumbar Pembahasan APBD</h3>
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-                            Hadir sebagai Wakil Ketua Komisi 2 dalam rapat paripurna pembahasan alokasi anggaran belanja daerah untuk sektor pertanian dan UMKM...
-                        </p>
-                        <a href="#" class="text-nasdem-blue font-semibold text-sm hover:underline">Baca Selengkapnya</a>
-                    </div>
-                </article> -->
-
-                <!-- Card 3 -->
-<!--                 <article class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="https://placehold.co/600x400/e2e8f0/475569?text=Pengumuman" alt="Pengumuman" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                            Pengumuman
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="text-sm text-gray-500 mb-2 flex items-center gap-2">
-                            <i class="far fa-calendar-alt"></i> 05 Agustus 2026
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-nasdem-blue transition-colors">Jadwal Penyerahan Bantuan Alsintan Tahap 1</h3>
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-                            Diberitahukan kepada kelompok tani di wilayah Kabupaten Lima Puluh Kota yang telah terverifikasi, bahwa penyerahan bantuan alat mesin pertanian akan dilaksanakan...
-                        </p>
-                        <a href="#" class="text-nasdem-blue font-semibold text-sm hover:underline">Baca Selengkapnya</a>
-                    </div>
-                </article> -->
-            </div>
+            <!-- Anda bisa uncomment grid kegiatan di sini nanti -->
         </div>
     </section>
 
     <!-- Galeri Dokumentasi -->
     <section id="galeri" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
+            <div class="text-center mb-12 reveal-up">
                 <h2 class="text-3xl md:text-4xl font-bold text-nasdem-blue mb-4">Galeri Dokumentasi</h2>
                 <div class="w-24 h-1.5 bg-nasdem-yellow mx-auto rounded-full mb-6"></div>
                 <p class="text-gray-600 max-w-2xl mx-auto">Momen-momen kegiatan bersama masyarakat dan tugas-tugas kedewanan.</p>
@@ -465,58 +466,58 @@
 
             <!-- Grid Galeri -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <!-- Foto-foto Placeholder -->
-                <a href="#!" class="group block relative overflow-hidden rounded-xl aspect-square shadow-sm">
+                <a href="#!" class="group block relative overflow-hidden rounded-xl aspect-square shadow-sm reveal-up">
                     <img src="foto-resmi.png" alt="Kegiatan" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-nasdem-blue/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
-                        <p class="text-white font-medium text-sm">Foto Resmi</p>
+                    <div class="absolute inset-0 bg-nasdem-blue/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-center">
+                        <p class="text-white font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Foto Resmi</p>
                     </div>
                 </a>
-                <a href="#!" class="group block relative overflow-hidden rounded-xl aspect-square shadow-sm">
+                <a href="#!" class="group block relative overflow-hidden rounded-xl aspect-square shadow-sm reveal-up delay-100">
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWvJfmdHStQW3SByDRK0ItmkZrSrv2lwFnTzhMjmEzMJ9LFwxJIkfUSoH0X3saPTGLAxDe6ZdpgM5eg5ZIzo7PeM872dupCcyUfKA-js-KqYOJtTF1clfMvbkkUcDwzfTt0vm7fGwTTM8DsURwVHrgbPL8-OnVZnN6jjEcQQUtXpaFU6Bcx7wjzNtAZ5c/s1040/IMG-20240523-WA0014.jpg" alt="Kegiatan" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-nasdem-blue/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
-                        <p class="text-white font-medium text-sm">H.Ilson Cong Salurkan Bantuan Bencana Alam ke Posko Bencana BW Luak 50</p>
+                    <div class="absolute inset-0 bg-nasdem-blue/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-center">
+                        <p class="text-white font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">H.Ilson Cong Salurkan Bantuan Bencana Alam</p>
                     </div>
                 </a>
-                <a href="#!" class="group block relative overflow-hidden rounded-xl aspect-square shadow-sm">
+                <a href="#!" class="group block relative overflow-hidden rounded-xl aspect-square shadow-sm reveal-up delay-200">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVCGiH36hZA-CO6jzGGrwCSJap-UY9l4GeN5RfEswkbjRzBtapvqKrIKLp&s=10" alt="Kegiatan" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-nasdem-blue/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
-                        <p class="text-white font-medium text-sm">Reses di Taeh Baruah, Anggota DPRD Sumbar Ilson Cong Terima Aspirasi Masyarakat</p>
+                    <div class="absolute inset-0 bg-nasdem-blue/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-center">
+                        <p class="text-white font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Reses di Taeh Baruah Terima Aspirasi Masyarakat</p>
                     </div>
                 </a>
-                <a href="#!" class="group block relative overflow-hidden rounded-xl aspect-square shadow-sm">
+                <a href="#!" class="group block relative overflow-hidden rounded-xl aspect-square shadow-sm reveal-up delay-300">
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjvc8g8EjAb1C7RSP6bw6UVb9Zfn_vm0tYzP9rTzvLJMToGEp6aornl5opg-Buf6HLTwI7NiCY6Cv6i4c4SBRXtE4AR40HjUne0bsDJvp4_jNP2xLAMoiPX0ECFWXq2hBuJAPIkVaMNPzeqSyeHx_r0cXcsBraKXkZ_fwI0l9YuVAPr4UbmdvLXaghNXj8/w1200-h630-p-k-no-nu/1000753136.jpg" alt="Kegiatan" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-nasdem-blue/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
-                        <p class="text-white font-medium text-sm">H. Ilson Cong: Perlindungan Perempuan dan Anak Harus Dimulai dari Lingkungan Keluarga</p>
+                    <div class="absolute inset-0 bg-nasdem-blue/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-center">
+                        <p class="text-white font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Perlindungan Perempuan dan Anak</p>
                     </div>
                 </a>
             </div>
-            <div class="mt-8 text-center">
-                 <button class="px-6 py-2 border-2 border-nasdem-blue text-nasdem-blue rounded-full font-semibold hover:bg-nasdem-blue hover:text-white transition-colors">Muat Lebih Banyak</button>
+            <div class="mt-10 text-center reveal-up">
+                 <button class="px-8 py-3 border-2 border-nasdem-blue text-nasdem-blue rounded-full font-bold hover:bg-nasdem-blue hover:text-white transition-colors duration-300 hover:shadow-lg">Muat Lebih Banyak</button>
             </div>
         </div>
     </section>
 
-    <!-- Laporan Kinerja (Area untuk download/baca laporan) -->
+    <!-- Laporan Kinerja -->
     <section id="laporan" class="py-20 bg-white">
          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-             <div class="bg-gray-900 rounded-3xl p-8 md:p-12 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+             <div class="bg-gray-900 rounded-3xl p-8 md:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden reveal-zoom">
                 <!-- bg decor -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32"></div>
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32 animate-pulse"></div>
+                <div class="absolute bottom-0 left-0 w-40 h-40 bg-nasdem-yellow opacity-10 rounded-full -ml-20 -mb-20"></div>
                 
                 <div class="text-white z-10 w-full md:w-2/3">
                     <h2 class="text-3xl font-bold mb-4">Laporan Kinerja & Transparansi</h2>
                     <p class="text-gray-300 mb-6">
-                        Sebagai bentuk pertanggungjawaban kepada masyarakat pemilih di dapil Payakumbuh & Lima Puluh Kota, saya secara berkala menyajikan laporan hasil reses, capaian program, dan kinerja kedewanan yang dapat Anda unduh dan pelajari.
+                        Sebagai bentuk pertanggungjawaban kepada masyarakat pemilih di dapil Payakumbuh & Lima Puluh Kota, saya secara berkala menyajikan laporan hasil reses, capaian program, dan kinerja kedewanan.
                     </p>
                 </div>
                 
                 <div class="z-10 w-full md:w-auto flex flex-col gap-4">
-                    <a href="#" class="flex items-center justify-center gap-3 bg-nasdem-yellow text-gray-900 px-6 py-3 rounded-xl font-bold hover:bg-yellow-400 transition-colors w-full text-center">
-                        <i class="fas fa-file-pdf text-xl"></i> Laporan Reses 2025
+                    <a href="#" class="group flex items-center justify-center gap-3 bg-nasdem-yellow text-gray-900 px-6 py-3 rounded-xl font-bold hover:bg-yellow-400 transition-all hover:-translate-y-1 w-full text-center hover:shadow-lg">
+                        <i class="fas fa-file-pdf text-xl group-hover:scale-110 transition-transform"></i> Laporan Reses 2025
                     </a>
-                    <a href="#" class="flex items-center justify-center gap-3 bg-white/10 text-white border border-white/20 px-6 py-3 rounded-xl font-bold hover:bg-white/20 transition-colors w-full text-center">
-                        <i class="fas fa-chart-line text-xl"></i> Infografis Kinerja
+                    <a href="#" class="group flex items-center justify-center gap-3 bg-white/10 text-white border border-white/20 px-6 py-3 rounded-xl font-bold hover:bg-white/20 transition-all hover:-translate-y-1 w-full text-center">
+                        <i class="fas fa-chart-line text-xl group-hover:scale-110 transition-transform"></i> Infografis Kinerja
                     </a>
                 </div>
              </div>
@@ -528,13 +529,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
                 <!-- Info Kontak -->
-                <div>
+                <div class="reveal-left">
                     <h2 class="text-3xl font-bold text-nasdem-blue mb-4">Hubungi Kami</h2>
                     <p class="text-gray-600 mb-8">Sampaikan aspirasi, keluhan, saran, atau undangan kegiatan. Tim kami akan merespon pesan Anda secepatnya.</p>
                     
                     <div class="space-y-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-nasdem-blue flex-shrink-0">
+                        <div class="flex items-start gap-4 group cursor-default">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-nasdem-blue flex-shrink-0 group-hover:bg-nasdem-blue group-hover:text-white transition-colors duration-300 shadow-sm">
                                 <i class="fas fa-map-marker-alt text-xl"></i>
                             </div>
                             <div>
@@ -542,8 +543,8 @@
                                 <p class="text-gray-600 text-sm mt-1">Jorong Kubu Gadang, RT 000/RW 000, Kel. Taeh Baruah, Kec. Payakumbuh, Kab. Lima Puluh Kota, Sumatera Barat.</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-nasdem-blue flex-shrink-0">
+                        <div class="flex items-start gap-4 group cursor-default">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-nasdem-blue flex-shrink-0 group-hover:bg-nasdem-yellow group-hover:text-white transition-colors duration-300 shadow-sm">
                                 <i class="fab fa-whatsapp text-xl"></i>
                             </div>
                             <div>
@@ -551,8 +552,8 @@
                                 <p class="text-gray-600 text-sm mt-1">0812-1050-7711</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-nasdem-blue flex-shrink-0">
+                        <div class="flex items-start gap-4 group cursor-default">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-nasdem-blue flex-shrink-0 group-hover:bg-red-500 group-hover:text-white transition-colors duration-300 shadow-sm">
                                 <i class="fas fa-envelope text-xl"></i>
                             </div>
                             <div>
@@ -566,16 +567,16 @@
                     <div class="mt-10">
                         <h4 class="font-bold text-gray-800 mb-4">Ikuti Sosial Media Saya</h4>
                         <div class="flex gap-4">
-                            <a href="#" class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-nasdem-blue hover:text-white transition-colors">
+                            <a href="#" class="w-10 h-10 bg-white shadow-md rounded-full flex items-center justify-center text-gray-600 hover:bg-nasdem-blue hover:text-white transition-all transform hover:-translate-y-1">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="#" class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-nasdem-blue hover:text-white transition-colors">
+                            <a href="#" class="w-10 h-10 bg-white shadow-md rounded-full flex items-center justify-center text-gray-600 hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="#" class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-red-600 hover:text-white transition-colors">
+                            <a href="#" class="w-10 h-10 bg-white shadow-md rounded-full flex items-center justify-center text-gray-600 hover:bg-red-600 hover:text-white transition-all transform hover:-translate-y-1">
                                 <i class="fab fa-youtube"></i>
                             </a>
-                            <a href="#" class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-colors">
+                            <a href="#" class="w-10 h-10 bg-white shadow-md rounded-full flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-all transform hover:-translate-y-1">
                                 <i class="fab fa-tiktok"></i>
                             </a>
                         </div>
@@ -583,7 +584,7 @@
                 </div>
 
                 <!-- Form Kontak -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 reveal-right">
                     <h3 class="text-2xl font-bold text-gray-800 mb-6">Kirim Pesan / Aspirasi</h3>
                     <form id="contactForm" class="space-y-4">
                         <div>
@@ -609,8 +610,8 @@
                             <label for="pesan" class="block text-sm font-medium text-gray-700 mb-1">Isi Pesan</label>
                             <textarea id="pesan" name="pesan" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nasdem-blue focus:border-nasdem-blue outline-none transition-shadow resize-none" placeholder="Tuliskan pesan atau aspirasi Anda di sini..." required></textarea>
                         </div>
-                        <button type="submit" class="w-full bg-nasdem-blue text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition-colors shadow-md">
-                            Kirim Pesan Sekarang
+                        <button type="submit" class="w-full bg-nasdem-blue text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition-all transform hover:scale-[1.02] shadow-md hover:shadow-lg active:scale-95">
+                            Kirim Pesan via WhatsApp
                         </button>
                     </form>
                 </div>
@@ -634,20 +635,20 @@
                 <div>
                     <h3 class="text-lg font-bold mb-4">Tautan Cepat</h3>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#beranda" class="hover:text-nasdem-yellow transition-colors">Beranda</a></li>
-                        <li><a href="#profil" class="hover:text-nasdem-yellow transition-colors">Profil Biodata</a></li>
-                        <li><a href="#kegiatan" class="hover:text-nasdem-yellow transition-colors">Agenda & Kegiatan</a></li>
-                        <li><a href="#laporan" class="hover:text-nasdem-yellow transition-colors">Laporan Kinerja</a></li>
+                        <li><a href="#beranda" class="hover:text-nasdem-yellow transition-colors hover:translate-x-1 inline-block transform duration-200">Beranda</a></li>
+                        <li><a href="#profil" class="hover:text-nasdem-yellow transition-colors hover:translate-x-1 inline-block transform duration-200">Profil Biodata</a></li>
+                        <li><a href="#kegiatan" class="hover:text-nasdem-yellow transition-colors hover:translate-x-1 inline-block transform duration-200">Agenda & Kegiatan</a></li>
+                        <li><a href="#laporan" class="hover:text-nasdem-yellow transition-colors hover:translate-x-1 inline-block transform duration-200">Laporan Kinerja</a></li>
                     </ul>
                 </div>
                 
                 <div>
                     <h3 class="text-lg font-bold mb-4">Info Terkait</h3>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-nasdem-yellow transition-colors">DPRD Prov. Sumatera Barat</a></li>
-                        <li><a href="#" class="hover:text-nasdem-yellow transition-colors">Partai NasDem Sumbar</a></li>
-                        <li><a href="#" class="hover:text-nasdem-yellow transition-colors">Pemkab Lima Puluh Kota</a></li>
-                        <li><a href="#" class="hover:text-nasdem-yellow transition-colors">Pemkot Payakumbuh</a></li>
+                        <li><a href="#" class="hover:text-nasdem-yellow transition-colors hover:translate-x-1 inline-block transform duration-200">DPRD Prov. Sumatera Barat</a></li>
+                        <li><a href="#" class="hover:text-nasdem-yellow transition-colors hover:translate-x-1 inline-block transform duration-200">Partai NasDem Sumbar</a></li>
+                        <li><a href="#" class="hover:text-nasdem-yellow transition-colors hover:translate-x-1 inline-block transform duration-200">Pemkab Lima Puluh Kota</a></li>
+                        <li><a href="#" class="hover:text-nasdem-yellow transition-colors hover:translate-x-1 inline-block transform duration-200">Pemkot Payakumbuh</a></li>
                     </ul>
                 </div>
             </div>
@@ -694,18 +695,21 @@
             });
         });
 
-        // Navbar scroll effect (add shadow and tighten background on scroll)
+        // Navbar scroll effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 10) {
                 navbar.classList.add('shadow-md');
                 navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.padding = '0.2rem 0'; // Slight shrink effect
             } else {
                 navbar.classList.remove('shadow-md');
-                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.background = 'rgba(255, 255, 255, 0.90)';
+                navbar.style.padding = '0';
             }
         });
 
+        // WhatsApp Form Submit
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
     
@@ -726,7 +730,37 @@
             const url = `https://wa.me/${nomorWhatsApp}?text=${text}`;
     
             window.open(url, '_blank');
-        });      
+        });
+
+        /* --- Scroll Reveal Animation Logic --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 // Animasi muncul ketika 15% elemen terlihat
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-active');
+                        // Opsional: unobserve agar animasi hanya terjadi sekali
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            // Pilih semua elemen yang memiliki class reveal
+            const revealElements = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-zoom');
+            revealElements.forEach(el => observer.observe(el));
+            
+            // Trigger untuk Hero text agar langsung muncul saat diload
+            setTimeout(() => {
+                document.querySelectorAll('#beranda .reveal-left, #beranda .reveal-right').forEach(el => {
+                    el.classList.add('reveal-active');
+                });
+            }, 100);
+        });
     </script>
 </body>
 </html>
